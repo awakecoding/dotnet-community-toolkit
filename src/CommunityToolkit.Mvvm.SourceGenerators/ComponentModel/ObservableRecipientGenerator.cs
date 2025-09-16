@@ -31,6 +31,15 @@ public sealed class ObservableRecipientGenerator : TransitiveMembersGenerator<Ob
     }
 
     /// <inheritdoc/>
+    public override void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        // TEMP: Disable unused generator for performance testing
+        return;
+        
+        base.Initialize(context);
+    }
+
+    /// <inheritdoc/>
     private protected override ObservableRecipientInfo? ValidateTargetTypeAndGetInfo(INamedTypeSymbol typeSymbol, AttributeData attributeData, Compilation compilation, out ImmutableArray<DiagnosticInfo> diagnostics)
     {
         diagnostics = ImmutableArray<DiagnosticInfo>.Empty;

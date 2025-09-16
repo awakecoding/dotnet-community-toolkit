@@ -2428,7 +2428,6 @@ public partial class Test_SourceGeneratorsDiagnostics
 
         IIncrementalGenerator[] generators =
         {
-            new IMessengerRegisterAllGenerator(),
             new ObservableObjectGenerator(),
             new INotifyPropertyChangedGenerator(),
             new ObservablePropertyGenerator(),

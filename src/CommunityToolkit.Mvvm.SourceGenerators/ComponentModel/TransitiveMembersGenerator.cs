@@ -57,7 +57,7 @@ public abstract partial class TransitiveMembersGenerator<TInfo> : IIncrementalGe
     }
 
     /// <inheritdoc/>
-    public void Initialize(IncrementalGeneratorInitializationContext context)
+    public virtual void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Gather all generation info, and any diagnostics
         IncrementalValuesProvider<Result<(HierarchyInfo Hierarchy, MetadataInfo? MetadataInfo, TInfo? Info)>> generationInfoWithErrors =
