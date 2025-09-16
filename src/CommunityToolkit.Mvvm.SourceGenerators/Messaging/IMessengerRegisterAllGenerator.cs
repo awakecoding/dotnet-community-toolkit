@@ -80,24 +80,25 @@ public sealed partial class IMessengerRegisterAllGenerator : IIncrementalGenerat
             .Select(static (item, _) => item.HasAccessibleTypeWithMetadataName("System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembersAttribute"));
 
         // Gather the conditional flag and attribute availability
-        IncrementalValueProvider<(bool IsHeaderFileNeeded, bool IsDynamicallyAccessedMembersAttributeAvailable)> headerFileInfo =
+        IncrementalValueProvider<(bool Condition, bool State)> headerFileInfo =
             isHeaderFileNeeded
-            .Combine(isDynamicallyAccessedMembersAttributeAvailable);
+            .Combine(isDynamicallyAccessedMembersAttributeAvailable)
+            .Select(static (item, _) => (item.Left, item.Right));
 
         // Generate the header file with the attributes
-        context.RegisterConditionalImplementationSourceOutput(headerFileInfo, static (context, item) =>
+        context.RegisterConditionalImplementationSourceOutput(headerFileInfo, static (context, isDynamicallyAccessedMembersAttributeAvailable) =>
         {
-            CompilationUnitSyntax compilationUnit = Execute.GetSyntax(item);
+            var sourceText = Execute.GetSyntax(isDynamicallyAccessedMembersAttributeAvailable);
 
-            context.AddSource("__IMessengerExtensions.g.cs", compilationUnit);
+            context.AddSource("__IMessengerExtensions.g.cs", sourceText);
         });
 
         // Generate the class with all registration methods
         context.RegisterImplementationSourceOutput(recipientInfo, static (context, item) =>
         {
-            CompilationUnitSyntax compilationUnit = Execute.GetSyntax(item);
+            var sourceText = Execute.GetSyntax(item);
 
-            context.AddSource($"{item.FilenameHint}.g.cs", compilationUnit);
+            context.AddSource($"{item.FilenameHint}.g.cs", sourceText);
         });
     }
 }
