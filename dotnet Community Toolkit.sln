@@ -65,7 +65,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CommunityToolkit.Mvvm.Sourc
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CommunityToolkit.Mvvm.ExternalAssembly", "tests\CommunityToolkit.Mvvm.ExternalAssembly\CommunityToolkit.Mvvm.ExternalAssembly.shproj", "{E827A9CD-405F-43E4-84C7-68CC7E845CDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120", "src\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120.csproj", "{FCC13AD5-CEB8-4CC1-8250-89B616D126F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityToolkit.Mvvm.SourceGenerators", "src\CommunityToolkit.Mvvm.SourceGenerators\CommunityToolkit.Mvvm.SourceGenerators.csproj", "{FCC13AD5-CEB8-4CC1-8250-89B616D126F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120.UnitTests", "tests\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120.UnitTests\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120.UnitTests.csproj", "{C342302D-A263-42D6-B8EE-01DEF8192690}"
 EndProject

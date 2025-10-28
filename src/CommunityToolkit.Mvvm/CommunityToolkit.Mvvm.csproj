@@ -64,9 +64,9 @@
     <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.1.6" PrivateAssets="all" />
   </ItemGroup>
 
-  <!-- Reference the Roslyn 4.12.0 source generator project -->
+  <!-- Reference the source generator project -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <ProjectReference Include="..\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CommunityToolkit.Mvvm.SourceGenerators\CommunityToolkit.Mvvm.SourceGenerators.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <!-- Add the [InternalsVisibleTo] attribute for the test project -->
@@ -110,7 +110,7 @@
       Pack the source generator to the right package folder for Roslyn 4.12.
       Roslyn will load the generator compatible with Roslyn's version in the SDK.
     -->
-    <None Include="..\CommunityToolkit.Mvvm.SourceGenerators.Roslyn4120\bin\$(Configuration)\netstandard2.0\CommunityToolkit.Mvvm.SourceGenerators.dll" PackagePath="analyzers\dotnet\roslyn4.12\cs" Pack="true" Visible="false" />
+    <None Include="..\CommunityToolkit.Mvvm.SourceGenerators\bin\$(Configuration)\netstandard2.0\CommunityToolkit.Mvvm.SourceGenerators.dll" PackagePath="analyzers\dotnet\roslyn4.12\cs" Pack="true" Visible="false" />
   </ItemGroup>
 
 </Project>
