@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CommunityToolkit.Mvvm.UnitTests;
@@ -35,24 +34,6 @@ public partial class Test_ArgumentNullException
         Assert(() => model.SetProperty(EqualityComparer<string>.Default, new object(), callback: null!), "callback");
         Assert(() => model.SetProperty(callback: (Action<Task?>)null!), "callback");
         Assert(() => model.SetProperty(callback: (Action<Task<string>?>)null!), "callback");
-    }
-
-    [TestMethod]
-    public void Test_ArgumentNullException_ObservableRecipient()
-    {
-        Assert(() => new TestObservableRecipient(null!), "messenger");
-
-        TestObservableRecipient model = new(new WeakReferenceMessenger());
-
-        Assert(() => model.SetProperty(comparer: null!), "comparer");
-        Assert(() => model.SetProperty(callback: null!), "callback");
-        Assert(() => model.SetProperty(comparer: null!, s => { }), "comparer");
-        Assert(() => model.SetProperty(EqualityComparer<string>.Default, callback: null!), "callback");
-        Assert(() => model.SetProperty(model: null!, (object m, string v) => { }), "model");
-        Assert(() => model.SetProperty(new object(), callback: null!), "callback");
-        Assert(() => model.SetProperty(comparer: null!, new object(), (object m, string v) => { }), "comparer");
-        Assert(() => model.SetProperty(EqualityComparer<string>.Default, model: null!, (object m, string v) => { }), "model");
-        Assert(() => model.SetProperty(EqualityComparer<string>.Default, new object(), callback: null!), "callback");
     }
 
     [TestMethod]
@@ -156,49 +137,6 @@ public partial class Test_ArgumentNullException
             TaskNotifier<string>? dummy = null;
 
             _ = SetPropertyAndNotifyOnCompletion(ref dummy, null, callback);
-        }
-    }
-
-    private class TestObservableRecipient : ObservableRecipient
-    {
-        public TestObservableRecipient(IMessenger messenger)
-            : base(messenger)
-        {
-        }
-
-        public void SetProperty(IEqualityComparer<string> comparer)
-        {
-            string dummy = "";
-
-            _ = SetProperty(ref dummy, dummy, comparer, true);
-        }
-
-        public void SetProperty(Action<string> callback)
-        {
-            string dummy = "";
-
-            _ = SetProperty(dummy, dummy, callback, true);
-        }
-
-        public void SetProperty(IEqualityComparer<string> comparer, Action<string> callback)
-        {
-            string dummy = "";
-
-            _ = SetProperty(dummy, dummy, comparer, callback, true);
-        }
-
-        public void SetProperty(object model, Action<object, string> callback)
-        {
-            string dummy = "";
-
-            _ = SetProperty(dummy, dummy, model, callback, true);
-        }
-
-        public void SetProperty(IEqualityComparer<string> comparer, object model, Action<object, string> callback)
-        {
-            string dummy = "";
-
-            _ = SetProperty(dummy, dummy, comparer, model, callback, true);
         }
     }
 

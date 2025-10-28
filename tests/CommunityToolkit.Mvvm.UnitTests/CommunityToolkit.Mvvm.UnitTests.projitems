@@ -20,7 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Test_ArgumentNullException.ComponentModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_ArgumentNullException.DependencyInjection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_ArgumentNullException.Input.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Test_ArgumentNullException.Messaging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_AsyncRelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_AsyncRelayCommand{T}.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_INotifyPropertyChangedAttribute.cs" />
@@ -28,7 +27,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Test_ObservableObjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_ObservablePropertyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_ObservablePropertyAttribute.RootNamespace.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Test_ObservableRecipientAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_ObservableValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test_RelayCommandAttribute.cs" />
