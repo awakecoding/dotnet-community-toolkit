@@ -8,8 +8,8 @@ namespace CommunityToolkit.Mvvm.ComponentModel;
 
 /// <summary>
 /// An attribute that can be used to support <see cref="ObservablePropertyAttribute"/> in generated properties, when applied to
-/// partial properties contained in a type that is inheriting from <see cref="ObservableValidator"/> and using any validation attributes.
-/// When this attribute is used, the generated property setter will also call <see cref="ObservableValidator.ValidateProperty(object?, string)"/>.
+/// partial properties contained in a type that is using validation attributes.
+/// When this attribute is used, the generated property setter will also call validation logic.
 /// This allows generated properties to opt-in into validation behavior without having to fallback into a full explicit observable property.
 /// <para>
 /// This attribute can be used as follows:

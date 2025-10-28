@@ -17,16 +17,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <LogicalName>ObservableObject.cs</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)EmbeddedResources\ObservableRecipient.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <LogicalName>ObservableRecipient.cs</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyPropertyChangedGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\AttributeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\INotifyPropertyChangedInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\ObservableRecipientInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\PropertyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\TypedConstantInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Models\TypedConstantInfo.Factory.cs" />
@@ -34,7 +29,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservableObjectGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservablePropertyGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservablePropertyGenerator.Execute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservableRecipientGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservableValidatorValidateAllPropertiesGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\ObservableValidatorValidateAllPropertiesGenerator.Execute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\TransitiveMembersGenerator.cs" />
@@ -94,7 +88,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Input\Models\CommandInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input\RelayCommandGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Input\RelayCommandGenerator.Execute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessengerRegisterAllGenerator.cs" />
+    
+    <!-- Shared Models -->
     <Compile Include="$(MSBuildThisFileDirectory)Models\DiagnosticInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HierarchyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HierarchyInfo.Syntax.cs" />

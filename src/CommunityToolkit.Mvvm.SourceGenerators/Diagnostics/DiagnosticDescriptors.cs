@@ -97,6 +97,7 @@ internal static class DiagnosticDescriptors
         description: $"Cannot apply [ObservableObject] to a type that already declares the {nameof(INotifyPropertyChanging)} interface.",
         helpLinkUri: "https://aka.ms/mvvmtoolkit/errors/mvvmtk0003");
 
+    /*
     /// <summary>
     /// Gets a <see cref="DiagnosticDescriptor"/> indicating when a duplicate declaration of <see cref="INotifyPropertyChanging"/> would happen.
     /// <para>
@@ -128,6 +129,7 @@ internal static class DiagnosticDescriptors
         isEnabledByDefault: true,
         description: $"Cannot apply [ObservableRecipient] to a type that lacks necessary base functionality (it should either inherit from ObservableObject, or be annotated with [ObservableObject] or [INotifyPropertyChanged]).",
         helpLinkUri: "https://aka.ms/mvvmtoolkit/errors/mvvmtk0005");
+    */
 
     /// <summary>
     /// Gets a <see cref="DiagnosticDescriptor"/> indicating when the target type doesn't inherit from the <c>ObservableValidator</c> class.
@@ -366,6 +368,7 @@ internal static class DiagnosticDescriptors
         description: "Fields and properties not annotated with [ObservableProperty] cannot use [NotifyPropertyChangedFor], [NotifyCanExecuteChangedFor], [NotifyPropertyChangedRecipients] and [NotifyDataErrorInfo].",
         helpLinkUri: "https://aka.ms/mvvmtoolkit/errors/mvvmtk0020");
 
+    /*
     /// <summary>
     /// Gets a <see cref="DiagnosticDescriptor"/> indicating when <c>[ObservableRecipient]</c> is applied to a type with an attribute already.
     /// <para>
@@ -381,6 +384,7 @@ internal static class DiagnosticDescriptors
         isEnabledByDefault: true,
         description: "Cannot apply [ObservableRecipient] to a type that already inherits this attribute from a base type.",
         helpLinkUri: "https://aka.ms/mvvmtoolkit/errors/mvvmtk0021");
+    */
 
     /// <summary>
     /// Gets a <see cref="DiagnosticDescriptor"/> indicating when <c>[NotifyPropertyChangedRecipients]</c> is applied to a field or property in an invalid type.
