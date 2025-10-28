@@ -31,9 +31,6 @@ public sealed class INotifyPropertyChangedGenerator : TransitiveMembersGenerator
     /// <inheritdoc/>
     public override void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // TEMP: Disable unused generator for performance testing
-        return;
-        
         base.Initialize(context);
     }
 
