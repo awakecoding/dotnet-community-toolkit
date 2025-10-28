@@ -32,6 +32,18 @@ partial class ObservablePropertyGenerator
     internal static class Execute
     {
         /// <summary>
+        /// Known MVVM attribute names for fast filtering during attribute iteration.
+        /// This set enables O(1) lookup to quickly reject irrelevant attributes.
+        /// </summary>
+        private static readonly HashSet<string> KnownMvvmAttributeNames = new()
+        {
+            "CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedForAttribute",
+            "CommunityToolkit.Mvvm.ComponentModel.NotifyCanExecuteChangedForAttribute",
+            "CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedRecipientsAttribute",
+            "CommunityToolkit.Mvvm.ComponentModel.NotifyDataErrorInfoAttribute"
+        };
+
+        /// <summary>
         /// Checks whether an input syntax node is a candidate property declaration for the generator.
         /// </summary>
         /// <param name="node">The input syntax node to check.</param>
@@ -270,10 +282,22 @@ partial class ObservablePropertyGenerator
 
             using ImmutableArrayBuilder<DiagnosticInfo> builder = ImmutableArrayBuilder<DiagnosticInfo>.Rent();
 
-            // Gather attributes info
+            // Gather attributes info with optimized early filtering
             foreach (AttributeData attributeData in memberSymbol.GetAttributes())
             {
                 token.ThrowIfCancellationRequested();
+
+                // Fast path: Get the attribute's fully qualified name once
+                string? attributeClassName = attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+                // Early rejection: Skip attributes that are not known MVVM attributes and not validation attributes
+                // This avoids expensive operations for irrelevant attributes
+                if (attributeClassName is not null &&
+                    !KnownMvvmAttributeNames.Contains(attributeClassName) &&
+                    !attributeData.AttributeClass!.InheritsFromFullyQualifiedMetadataName("System.ComponentModel.DataAnnotations.ValidationAttribute"))
+                {
+                    continue;
+                }
 
                 // Gather dependent property and command names
                 if (TryGatherDependentPropertyChangedNames(memberSymbol, attributeData, in propertyChangedNames, in builder) ||
