@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
@@ -13,12 +15,38 @@ namespace CommunityToolkit.Mvvm.SourceGenerators.Extensions;
 internal static class ISymbolExtensions
 {
     /// <summary>
+    /// Thread-local cache for fully qualified type names without nullability annotations.
+    /// </summary>
+    [ThreadStatic]
+    private static Dictionary<ITypeSymbol, string>? t_fullyQualifiedNameCache;
+
+    /// <summary>
+    /// Thread-local cache for fully qualified type names with nullability annotations.
+    /// </summary>
+    [ThreadStatic]
+    private static Dictionary<ITypeSymbol, string>? t_fullyQualifiedNameWithNullabilityCache;
+
+    /// <summary>
     /// Gets the fully qualified name for a given symbol.
     /// </summary>
     /// <param name="symbol">The input <see cref="ISymbol"/> instance.</param>
     /// <returns>The fully qualified name for <paramref name="symbol"/>.</returns>
     public static string GetFullyQualifiedName(this ISymbol symbol)
     {
+        // Use cached version for type symbols
+        if (symbol is ITypeSymbol typeSymbol)
+        {
+            t_fullyQualifiedNameCache ??= new Dictionary<ITypeSymbol, string>(SymbolEqualityComparer.Default);
+
+            if (!t_fullyQualifiedNameCache.TryGetValue(typeSymbol, out string? cachedName))
+            {
+                cachedName = typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                t_fullyQualifiedNameCache[typeSymbol] = cachedName;
+            }
+
+            return cachedName;
+        }
+
         return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
     }
 
@@ -29,6 +57,20 @@ internal static class ISymbolExtensions
     /// <returns>The fully qualified name for <paramref name="symbol"/>.</returns>
     public static string GetFullyQualifiedNameWithNullabilityAnnotations(this ISymbol symbol)
     {
+        // Use cached version for type symbols
+        if (symbol is ITypeSymbol typeSymbol)
+        {
+            t_fullyQualifiedNameWithNullabilityCache ??= new Dictionary<ITypeSymbol, string>(SymbolEqualityComparer.Default);
+
+            if (!t_fullyQualifiedNameWithNullabilityCache.TryGetValue(typeSymbol, out string? cachedName))
+            {
+                cachedName = typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier));
+                t_fullyQualifiedNameWithNullabilityCache[typeSymbol] = cachedName;
+            }
+
+            return cachedName;
+        }
+
         return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier));
     }
 

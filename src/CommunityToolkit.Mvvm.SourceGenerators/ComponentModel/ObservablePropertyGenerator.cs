@@ -68,15 +68,18 @@ public sealed partial class ObservablePropertyGenerator : IIncrementalGenerator
         // Output the diagnostics
         context.ReportDiagnostics(propertyInfoWithErrors.Select(static (item, _) => item.Info.Errors));
 
-        // Get the filtered sequence to enable caching
-        IncrementalValuesProvider<(HierarchyInfo Hierarchy, Result<PropertyInfo> Info)> propertyInfo =
+        // Get the filtered sequence to enable caching (add tracking name for incremental performance)
+        IncrementalValuesProvider<(HierarchyInfo Hierarchy, Result<PropertyInfo?> Info)> propertyInfo =
             propertyInfoWithErrors
-            .Where(static item => item.Info.Value is not null)!;
+            .Where(static item => item.Info.Value is not null)
+            .WithTrackingName("ObservableProperty.PropertyInfo");
 
-        // Split and group by containing type
+        // Split and group by containing type (add tracking name for incremental performance)
         IncrementalValuesProvider<(HierarchyInfo Hierarchy, EquatableArray<PropertyInfo> Properties)> groupedPropertyInfo =
             propertyInfo
-            .GroupBy(static item => item.Left, static item => item.Right.Value);
+            .Select(static (item, _) => (item.Hierarchy, new Result<PropertyInfo>(item.Info.Value!, item.Info.Errors)))
+            .GroupBy(static item => item.Left, static item => item.Right.Value)
+            .WithTrackingName("ObservableProperty.Grouped");
 
         // Generate the requested properties and methods
         context.RegisterSourceOutput(groupedPropertyInfo, static (context, item) =>
@@ -97,9 +100,10 @@ public sealed partial class ObservablePropertyGenerator : IIncrementalGenerator
         // Gather all property changing names
         IncrementalValueProvider<EquatableArray<string>> propertyChangingNames =
             propertyInfo
-            .SelectMany(static (item, _) => item.Info.Value.PropertyChangingNames)
+            .SelectMany(static (item, _) => item.Info.Value!.PropertyChangingNames)
             .Collect()
-            .Select(static (item, _) => item.Distinct().ToImmutableArray().AsEquatableArray());
+            .Select(static (item, _) => item.Distinct().ToImmutableArray().AsEquatableArray())
+            .WithTrackingName("ObservableProperty.PropertyChangingNames");
 
         // Generate the cached property changing names
         context.RegisterSourceOutput(propertyChangingNames, static (context, item) =>
@@ -115,9 +119,10 @@ public sealed partial class ObservablePropertyGenerator : IIncrementalGenerator
         // Gather all property changed names
         IncrementalValueProvider<EquatableArray<string>> propertyChangedNames =
             propertyInfo
-            .SelectMany(static (item, _) => item.Info.Value.PropertyChangedNames)
+            .SelectMany(static (item, _) => item.Info.Value!.PropertyChangedNames)
             .Collect()
-            .Select(static (item, _) => item.Distinct().ToImmutableArray().AsEquatableArray());
+            .Select(static (item, _) => item.Distinct().ToImmutableArray().AsEquatableArray())
+            .WithTrackingName("ObservableProperty.PropertyChangedNames");
 
         // Generate the cached property changed names
         context.RegisterSourceOutput(propertyChangedNames, static (context, item) =>

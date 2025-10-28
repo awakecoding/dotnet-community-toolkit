@@ -390,6 +390,9 @@ partial class ObservablePropertyGenerator
 
             token.ThrowIfCancellationRequested();
 
+            // Get the IsValueType flag for optimized equality comparison
+            bool isValueType = GetPropertyType(memberSymbol).IsValueType;
+
             propertyInfo = new PropertyInfo(
                 memberSyntax.Kind(),
                 typeNameWithNullabilityAnnotations,
@@ -406,6 +409,7 @@ partial class ObservablePropertyGenerator
                 notifyDataErrorInfo,
                 isOldPropertyValueDirectlyReferenced,
                 isReferenceTypeOrUnconstrainedTypeParameter,
+                isValueType,
                 includeMemberNotNullOnSetAccessor,
                 includeRequiresUnreferencedCodeOnSetAccessor,
                 forwardedAttributes.ToImmutable());
@@ -1304,14 +1308,28 @@ partial class ObservablePropertyGenerator
             // Get the property type syntax
             TypeSyntax propertyType = IdentifierName(propertyInfo.TypeNameWithNullabilityAnnotations);
 
-            // Generate the inner setter block as follows:
-            //
-            // if (!global::System.Collections.Generic.EqualityComparer<<PROPERTY_TYPE>>.Default.Equals(<FIELD_EXPRESSION>, value))
-            // {
-            //     <STATEMENTS>
-            // }
-            IfStatementSyntax setterIfStatement =
-                IfStatement(
+            // Generate optimized equality comparison based on type:
+            // - For value types: use simple != operator (most efficient)
+            // - For reference types: use EqualityComparer<T> (handles null properly)
+            ExpressionSyntax equalityCondition;
+
+            if (propertyInfo.IsValueType)
+            {
+                // For value types, use simple inequality: field != value
+                // This generates the most efficient IL code
+                equalityCondition =
+                    PrefixUnaryExpression(
+                        SyntaxKind.LogicalNotExpression,
+                        ParenthesizedExpression(
+                            BinaryExpression(
+                                SyntaxKind.EqualsExpression,
+                                setterFieldExpression,
+                                IdentifierName("value"))));
+            }
+            else
+            {
+                // For reference types and unconstrained generics, use EqualityComparer
+                equalityCondition =
                     PrefixUnaryExpression(
                         SyntaxKind.LogicalNotExpression,
                         InvocationExpression(
@@ -1325,7 +1343,18 @@ partial class ObservablePropertyGenerator
                                 IdentifierName("Equals")))
                         .AddArgumentListArguments(
                             Argument(setterFieldExpression),
-                            Argument(IdentifierName("value")))),
+                            Argument(IdentifierName("value"))));
+            }
+
+            // Generate the inner setter block as follows:
+            //
+            // if (<EQUALITY_CONDITION>)
+            // {
+            //     <STATEMENTS>
+            // }
+            IfStatementSyntax setterIfStatement =
+                IfStatement(
+                    equalityCondition,
                     Block(setterStatements.AsEnumerable()));
 
             // Prepare the forwarded attributes, if any, for all targets
